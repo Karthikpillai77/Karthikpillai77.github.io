@@ -2,10 +2,9 @@ baseURL = 'https://karthikpillai77.github.io/' # Update this later when you host
 languageCode = 'en-us'
 title = 'Karthik Pillai | Blog' # This shows up in the browser tab
 theme = 'hugo-theme-stack'
-[params]
-    locale = "en"
 
 [params]
+    locale = "en"
     mainSections = ["posts"]
 
 [params.colorScheme]
