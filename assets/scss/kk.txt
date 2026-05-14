@@ -1,0 +1,29 @@
+/* 1. Turn the main list into a flexible grid */
+.article-list {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)) !important;
+    gap: 24px !important;
+}
+
+/* 2. Style the individual post boxes to match the screenshot */
+.article-list article {
+    background-color: #0a0a0a !important; /* Pitch black background */
+    border: 1px solid #222 !important;    /* Subtle grey border */
+    border-radius: 16px !important;       /* Rounded corners */
+    padding: 24px !important;
+    transition: transform 0.2s ease, border-color 0.2s ease !important;
+    
+    /* Remove default Stack theme shadows */
+    box-shadow: none !important; 
+}
+
+/* 3. Add a slight hover effect when you mouse over a box */
+.article-list article:hover {
+    transform: translateY(-4px) !important; /* Floats up slightly */
+    border-color: #555 !important;          /* Border brightens */
+}
+
+/* 4. Fix image sizing inside the new smaller boxes */
+.article-list article .article-image img {
+    border-radius: 8px !important;
+}

@@ -1,0 +1,63 @@
+<div class="floating-tools">
+    <button id="toggle-reading" title="Reading Mode">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+        </svg>
+    </button>
+    
+    <button id="toggle-snow" title="Snow">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="12 2 15 8 22 9 17 14 18 21 12 17 6 21 7 14 2 9 9 8 12 2"></polygon>
+        </svg>
+    </button>
+</div>
+
+<div id="snow-wrap" style="display: none;"></div>
+
+<script>
+    // Wait for the whole page to load before running the script
+    document.addEventListener("DOMContentLoaded", function() {
+        
+        // 1. Reading Mode Logic
+        const readingBtn = document.getElementById('toggle-reading');
+        if (readingBtn) {
+            readingBtn.addEventListener('click', () => {
+                document.body.classList.toggle('reading-mode');
+            });
+        }
+
+        // 2. Live Snow Logic
+        const snowBtn = document.getElementById('toggle-snow');
+        const snowWrap = document.getElementById('snow-wrap');
+        let snowActive = false;
+
+        if (snowBtn && snowWrap) {
+            snowBtn.addEventListener('click', () => {
+                snowActive = !snowActive;
+                snowWrap.style.display = snowActive ? 'block' : 'none';
+                
+                // If it's turned on and empty, generate the snow
+                if(snowActive && snowWrap.innerHTML === '') {
+                    for(let i = 0; i < 60; i++) {
+                        let flake = document.createElement('div');
+                        flake.className = 'snowflake';
+                        flake.innerHTML = '❅';
+                        
+                        // Randomize position
+                        flake.style.left = Math.random() * 100 + 'vw';
+                        // Randomize speed (between 4s and 8s for a realistic gentle fall)
+                        flake.style.animationDuration = (Math.random() * 4 + 4) + 's'; 
+                        // Stagger the drops so they don't fall in a straight line
+                        flake.style.animationDelay = (Math.random() * 5) + 's';
+                        // Randomize size and opacity
+                        flake.style.opacity = Math.random() * 0.8 + 0.2;
+                        flake.style.fontSize = (Math.random() * 12 + 10) + 'px';
+                        
+                        snowWrap.appendChild(flake);
+                    }
+                }
+            });
+        }
+    });
+</script>

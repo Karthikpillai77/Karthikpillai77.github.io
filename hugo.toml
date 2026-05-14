@@ -1,0 +1,35 @@
+baseURL = 'https://example.org/' # Update this later when you host it
+languageCode = 'en-us'
+title = 'Karthik Pillai | Blog' # This shows up in the browser tab
+theme = 'hugo-theme-stack'
+
+[params]
+    mainSections = ["posts"]
+
+[params.colorScheme]
+    default = "dark" # Sets your preferred dark aesthetic
+    toggle = false    # Disables light mode toggle so it stays dark
+
+[menu]
+  [[menu.main]]
+    name = "Home"
+    url = "/"
+    weight = 1
+  [[menu.main]]
+    name = "About"
+    url = "/about/"
+    weight = 2
+  [[menu.main]]
+    name = "Write up"
+    url = "/posts/"
+    weight = 3
+  [[menu.main]]
+    name = "Share"
+    url = "/share/"
+    weight = 4
+
+[markup.goldmark.renderer]
+  unsafe = true
+
+[params.custom]
+    css = ["scss/custom.scss"]

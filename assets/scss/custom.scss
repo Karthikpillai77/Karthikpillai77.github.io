@@ -1,0 +1,265 @@
+/* 1. Turn the main list into a flexible grid */
+.article-list {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)) !important;
+    gap: 24px !important;
+}
+
+/* 2. Style the individual post boxes to match the screenshot */
+.article-list article {
+    background-color: #0a0a0a !important; /* Pitch black background */
+    border: 1px solid #222 !important;    /* Subtle grey border */
+    border-radius: 16px !important;       /* Rounded corners */
+    padding: 24px !important;
+    transition: transform 0.2s ease, border-color 0.2s ease !important;
+    
+    /* Remove default Stack theme shadows */
+    box-shadow: none !important; 
+}
+
+/* 3. Add a slight hover effect when you mouse over a box */
+.article-list article:hover {
+    transform: translateY(-4px) !important; /* Floats up slightly */
+    border-color: #555 !important;          /* Border brightens */
+}
+
+/* 4. Fix image sizing inside the new smaller boxes */
+.article-list article .article-image img {
+    border-radius: 8px !important;
+}
+
+/* Ensure ALL article boxes are anchor points for the icon */
+.article-list article,
+.article-list--compact article {
+    position: relative !important; 
+    overflow: visible !important; 
+}
+
+/* Position the terminal icon on the right side */
+.custom-card-icon {
+    position: absolute !important;
+    top: 24px !important;    
+    right: 24px !important;  
+    color: #555 !important; 
+    transition: color 0.2s ease !important;
+    z-index: 50 !important;  
+    pointer-events: none !important; 
+}
+
+/* Make the icon turn bright white when hovering over the card */
+.article-list--compact a:hover .custom-card-icon {
+    color: #ffffff !important;
+}
+
+/* 1. Turn the Write Up container into a Grid */
+section.article-list--compact {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)) !important;
+    gap: 24px !important;
+    margin-top: 2rem !important;
+    background: transparent !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+}
+
+/* 2. Shape the individual cards to match the screenshot */
+section.article-list--compact article {
+    background-color: #050505 !important; /* Pitch black background */
+    border: 1px solid #222 !important;    /* Subtle grey border */
+    border-radius: 16px !important;       
+    padding: 32px 24px !important;        /* Thick inner padding */
+    min-height: 280px !important;         /* Forces the tall, boxy look */
+    display: flex !important;
+    flex-direction: column !important;
+    transition: transform 0.2s ease, border-color 0.2s ease !important;
+}
+
+/* 3. Push the title and date down, leaving space at the top */
+section.article-list--compact .article-details {
+    margin-top: auto !important; 
+    display: flex !important;
+    flex-direction: column !important;
+}
+
+/* 4. Match the Title styling from the screenshot */
+section.article-list--compact .article-title {
+    font-size: 1.3rem !important;
+    font-weight: 600 !important;
+    line-height: 1.4 !important;
+    margin-bottom: 24px !important;
+}
+
+/* 5. Match the minimal Date/Time footer styling */
+section.article-list--compact .article-meta {
+    color: #666 !important;
+    font-size: 0.85rem !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* 6. Hover effects */
+section.article-list--compact article:hover {
+    transform: translateY(-4px) !important;
+    border-color: #555 !important;
+}
+
+/* 1. Hide the tiny "SECTION" label at the top */
+header .section-title {
+    display: none !important;
+}
+
+/* 2. Strip away the bulky grey background box */
+.section-card {
+    background: transparent !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin-bottom: 40px !important; /* Adds breathing room above the cards */
+}
+
+/* 3. Hide the "1 PAGE" counter */
+.section-count {
+    display: none !important;
+}
+
+/* 4. Make the main "Posts" title huge and sleek */
+.section-term {
+    font-size: 3rem !important; 
+    font-weight: 700 !important;
+    letter-spacing: -1px !important; /* Tightens the text slightly for a modern look */
+    color: #ffffff !important;       /* Bright white to pop against the dark background */
+    margin: 0 !important;
+}
+
+/* =========================================
+   FLOATING TOOLS & ANIMATIONS
+   ========================================= */
+
+/* 1. Position the Toolbar in the Top Right */
+.floating-tools {
+    position: fixed !important;
+    top: 24px !important;
+    right: 24px !important;
+    z-index: 9999 !important;
+    display: flex !important;
+    gap: 12px !important;
+}
+
+/* 2. Style the Buttons to match your dark aesthetic */
+.floating-tools button {
+    background: #0a0a0a !important;
+    border: 1px solid #333 !important;
+    color: #666 !important;
+    border-radius: 50% !important;
+    width: 46px !important;
+    height: 46px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.5) !important;
+}
+
+.floating-tools button:hover {
+    background: #1a1a1a !important;
+    color: #ffffff !important;
+    border-color: #666 !important;
+    transform: translateY(-2px) !important;
+}
+
+/* 3. READING MODE: Hide sidebars and center the text */
+body.reading-mode aside.sidebar,
+body.reading-mode aside.right-sidebar {
+    display: none !important; /* Hides the navigation menus */
+}
+
+body.reading-mode main.main {
+    max-width: 900px !important; /* Prevents text from stretching too wide */
+    margin: 0 auto !important;   /* Centers the article perfectly */
+}
+
+/* 4. SNOW ANIMATION: Make the particles fall */
+#snow-wrap {
+    pointer-events: none !important; 
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    z-index: 9998 !important; 
+    overflow: hidden !important;
+}
+
+/* Notice we removed !important from the animation properties so JS can control them */
+.snowflake {
+    position: absolute !important;
+    top: -10vh !important; /* Starts slightly off-screen to avoid popping in */
+    color: #ffffff !important;
+    user-select: none !important;
+    animation-name: fall;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+}
+
+@keyframes fall {
+    0% {
+        transform: translateY(-10vh) rotate(0deg);
+    }
+    100% {
+        transform: translateY(110vh) rotate(360deg);
+    }
+}
+
+/* =========================================
+   SIDEBAR TITLE STYLING
+   ========================================= */
+
+/* 1. Center the header area in the sidebar */
+.sidebar .site-info {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    width: 100% !important;
+    margin-bottom: 20px !important;
+}
+
+/* 2. Hide the original "Karthik Pillai | Blog" text */
+.sidebar .site-name a {
+    font-size: 0 !important; /* Makes the original text invisible */
+    display: flex !important;
+    justify-content: center !important;
+    width: 100% !important;
+}
+
+/* 3. Inject the new, beautiful centered text */
+.sidebar .site-name a::before {
+    content: "KARTHIK PILLAI" !important; /* The new text */
+    font-size: 1.6rem !important;
+    font-weight: 800 !important;
+    letter-spacing: 2px !important;
+    text-transform: uppercase !important;
+    
+    /* Adds a sleek silver/white gradient to the text */
+    background: linear-gradient(90deg, #ffffff, #777777) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    
+    /* Smooth hover animation */
+    transition: transform 0.3s ease, letter-spacing 0.3s ease !important;
+}
+
+/* 4. Add a subtle hover effect when people mouse over your name */
+.sidebar .site-name a:hover::before {
+    transform: scale(1.05) !important;
+    letter-spacing: 3px !important;
+}
+
+/* =========================================
+   REMOVE DEFAULT FOOTER
+   ========================================= */
+
+/* Hide the site footer completely */
+.site-footer {
+    display: none !important;
+}
