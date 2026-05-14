@@ -1,4 +1,4 @@
-baseURL = 'https://example.org/' # Update this later when you host it
+baseURL = 'https://karthikpillai77.github.io/' # Update this later when you host it
 languageCode = 'en-us'
 title = 'Karthik Pillai | Blog' # This shows up in the browser tab
 theme = 'hugo-theme-stack'
@@ -33,3 +33,5 @@ theme = 'hugo-theme-stack'
 
 [params.custom]
     css = ["scss/custom.scss"]
+[params]
+    locale = "en"    
