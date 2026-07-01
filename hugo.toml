@@ -1,6 +1,6 @@
-baseURL = 'https://karthikpillai77.github.io/' # Update this later when you host it
+baseURL = 'https://karthikpillai77.github.io/'
 languageCode = 'en-us'
-title = 'Karthik Pillai | Blog' # This shows up in the browser tab
+title = 'Karthik Pillai | Blog'
 theme = 'hugo-theme-stack'
 
 [params]
@@ -8,8 +8,8 @@ theme = 'hugo-theme-stack'
     mainSections = ["posts"]
 
 [params.colorScheme]
-    default = "dark" # Sets your preferred dark aesthetic
-    toggle = false    # Disables light mode toggle so it stays dark
+    default = "dark" 
+    toggle = false    
 
 [menu]
   [[menu.main]]
@@ -24,14 +24,11 @@ theme = 'hugo-theme-stack'
     name = "Write up"
     url = "/posts/"
     weight = 3
-  [[menu.main]]
-    name = "Share"
-    url = "/share/"
-    weight = 4
+  
 
-[markup.goldmark.renderer]
-  unsafe = true
+[markup]
+  [markup.goldmark.renderer]
+    unsafe = true
 
 [params.custom]
     css = ["scss/custom.scss"]
-  

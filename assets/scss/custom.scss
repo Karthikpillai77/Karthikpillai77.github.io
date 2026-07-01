@@ -179,36 +179,17 @@ body.reading-mode main.main {
 }
 
 /* 4. SNOW ANIMATION: Make the particles fall */
-#snow-wrap {
-    pointer-events: none !important; 
+.floating-tools {
     position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    width: 100vw !important;
-    height: 100vh !important;
-    z-index: 9998 !important; 
-    overflow: hidden !important;
+    top: 24px !important;
+    right: 24px !important;
+    z-index: 9999 !important;
+    display: flex !important;
+    gap: 12px !important;
 }
 
 /* Notice we removed !important from the animation properties so JS can control them */
-.snowflake {
-    position: absolute !important;
-    top: -10vh !important; /* Starts slightly off-screen to avoid popping in */
-    color: #ffffff !important;
-    user-select: none !important;
-    animation-name: fall;
-    animation-timing-function: linear;
-    animation-iteration-count: infinite;
-}
 
-@keyframes fall {
-    0% {
-        transform: translateY(-10vh) rotate(0deg);
-    }
-    100% {
-        transform: translateY(110vh) rotate(360deg);
-    }
-}
 
 /* =========================================
    SIDEBAR TITLE STYLING
@@ -263,3 +244,7 @@ body.reading-mode main.main {
 .site-footer {
     display: none !important;
 }
+
+
+
+
