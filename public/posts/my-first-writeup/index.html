@@ -301,9 +301,7 @@ When the Editor clicks Run, the script sweeps through the entire document instan
 </span></span><span style="display:flex;"><span>  <span style="color:#75715e">// Renders natively inside the Google Docs UI — no external links, no redirects
 </span></span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">DocumentApp</span>.<span style="color:#a6e22e">getUi</span>().<span style="color:#a6e22e">showModalDialog</span>(<span style="color:#a6e22e">html</span>, <span style="color:#e6db74">&#39;Security Alert&#39;</span>);
 </span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><video width="100%" controls>
-  <source src="/videos/SE1.mp4" type="video/mp4">
-</video>
+</span></span></code></pre></div><p><video src="/videos/SE1.mp4" width="100%" autoplay loop muted playsinline></video></p>
 <p>What the owner sees: An unexpected alert popup appearing directly inside their own document.</p>
 <h2 id="scenario-2--ui-denial-of-service-infinite-print-loop">Scenario 2 — UI Denial of Service (Infinite Print Loop)
 </h2><p>A slightly nastier payload locks up the document entirely. The attacker creates a hidden 1×1 pixel window that forces the browser&rsquo;s print dialog to open  and reopens it every second, even if the owner clicks &ldquo;Cancel.&rdquo;</p>

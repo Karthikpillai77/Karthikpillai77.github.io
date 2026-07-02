@@ -187,9 +187,7 @@ function formTriggerRan(e) {
 }
 ```
 
-<video width="100%" controls>
-  <source src="/videos/SE1.mp4" type="video/mp4">
-</video>
+<video src="/videos/SE1.mp4" width="100%" autoplay loop muted playsinline></video>
 
 What the owner sees: An unexpected alert popup appearing directly inside their own document.
 
