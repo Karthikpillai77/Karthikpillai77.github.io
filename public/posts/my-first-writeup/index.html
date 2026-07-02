@@ -217,6 +217,9 @@ The owner gives the editor a Document ID. Inside that document, there is text th
 When the Editor clicks Run, the script sweeps through the entire document instantly.</p>
 <p>Every single place where [NAME] or [DATE] appeared is perfectly swapped out with &ldquo;Alex Rivera&rdquo; and &ldquo;June 20, 2026&rdquo;.</p>
 <p>so here: A tired employee might miss a placeholder on page 4 of a long document. The script never misses. If the manager suddenly says, &ldquo;Here are the IDs for 100 different client letters, please update all of them&rdquo;, a human would take days to finish. The Editor could easily modify this script to pull a list of 100 names and dates from a Google Sheet, loop through the document IDs, and customize all 100 files in under a minute.</p>
+<video width="100%" controls>
+  <source src="/videos/Example_2.mp4" type="video/mp4">
+</video>
 <h2 id="moving-to-the-vulnerability">Moving to the Vulnerability
 </h2><p>Now that we understand how Apps Script handles automation and opens files using unique Document IDs let&rsquo;s look at the underlying security flaw I discovered.</p>
 <p>While building automations in Google Docs, I discovered a hidden flaw in Apps Script that gives read only viewers unexpected power&hellip;.</p>
@@ -249,9 +252,6 @@ When the Editor clicks Run, the script sweeps through the entire document instan
 </span></span><span style="display:flex;"><span>    .<span style="color:#a6e22e">create</span>();
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>From this point on, every time the document owner or editor refreshes the file, <code>formTriggerRan()</code> executes silently in their session.</p>
-<video width="100%" controls>
-  <source src="/videos/Example_2.mp4" type="video/mp4">
-</video>
 <hr>
 <h2 id="scenario-1--basic-proof-of-concept">Scenario 1 — Basic Proof of Concept
 </h2><p>The simplest payload. A modal alert that pops up in the owner&rsquo;s browser.</p>

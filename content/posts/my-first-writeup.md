@@ -88,6 +88,10 @@ Every single place where [NAME] or [DATE] appeared is perfectly swapped out with
 
 so here: A tired employee might miss a placeholder on page 4 of a long document. The script never misses. If the manager suddenly says, "Here are the IDs for 100 different client letters, please update all of them", a human would take days to finish. The Editor could easily modify this script to pull a list of 100 names and dates from a Google Sheet, loop through the document IDs, and customize all 100 files in under a minute.
 
+<video width="100%" controls>
+  <source src="/videos/Example_2.mp4" type="video/mp4">
+</video>
+
 ## Moving to the Vulnerability
 
 Now that we understand how Apps Script handles automation and opens files using unique Document IDs let's look at the underlying security flaw I discovered.
@@ -134,9 +138,7 @@ function myFunction() {
 
 From this point on, every time the document owner or editor refreshes the file, `formTriggerRan()` executes silently in their session.
 
-<video width="100%" controls>
-  <source src="/videos/Example_2.mp4" type="video/mp4">
-</video>
+
 
 ---
 
