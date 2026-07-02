@@ -92,6 +92,8 @@ so here: A tired employee might miss a placeholder on page 4 of a long document.
   <source src="/videos/Example_2.mp4" type="video/mp4">
 </video>
 
+
+
 ## Moving to the Vulnerability
 
 Now that we understand how Apps Script handles automation and opens files using unique Document IDs let's look at the underlying security flaw I discovered.
