@@ -187,7 +187,9 @@ function formTriggerRan(e) {
 }
 ```
 
-<video src="/videos/SE1.mp4" width="100%" autoplay loop muted playsinline></video>
+<video width="100%" controls>
+  <source src="/videos/SE_11.mp4" type="video/mp4">
+</video>
 
 What the owner sees: An unexpected alert popup appearing directly inside their own document.
 
@@ -213,7 +215,7 @@ function formTriggerRan(e) {
 ```
 
 <video width="100%" controls>
-  <source src="/videos/SE2.mp4" type="video/mp4">
+  <source src="/videos/SE_22.mp4" type="video/mp4">
 </video>
 
 **Impact:** The owner is stuck in an inescapable print loop. The document becomes completely unusable until they know to force close the tab.
@@ -352,7 +354,7 @@ function showPhishingModal(e) {
 }
 ```
 <video width="100%" controls>
-  <source src="/videos/SE4.mp4" type="video/mp4">
+  <source src="/videos/SE44.mp4" type="video/mp4">
 </video>
 
 
