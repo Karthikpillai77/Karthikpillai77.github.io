@@ -10,7 +10,7 @@ So before I get into the bug I found, I want to briefly explain what Apps Script
 
 Think of Google Apps Script as a superpower for your favorite Google apps like Docs, Sheets, Gmail, and Drive. It is a lightweight beginner friendly coding platform that lets you write simple scripts to automate tasks, connect your apps together and build custom features. If you already know how to use Google Docs or Sheets. Apps Script is like an invisible assistant that can do your work for you in the background. The main goal of Apps Script is automation, making things happen automatically so you don't have to do them manually.
 
-Here are three simple examples so you can understand it more easily. We can do a lot more with Apps Script but I am just showing the basics here.
+Here are the two simple examples so you can understand it more easily. We can do a lot more with Apps Script but I am just showing the basics here.
 
 ## Example 1: Auto inserting text into a Google Doc
 
